@@ -1,0 +1,17 @@
+<head>
+  <title>日記アプリケーション</title>
+</head>
+<body>
+  <% @result.each do |text| %>
+    <p>
+      <a href=<%= "/users/#{text['id']}" %>>
+        <div>
+          ID: <%= text['id'] %>
+          <br>
+          Name: <%= text['name'] %>
+        </div>
+      </a>
+    </p>
+  <% end %>
+</body>
+

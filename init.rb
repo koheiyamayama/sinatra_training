@@ -18,10 +18,13 @@ client.query <<-SQL
   );
 SQL
 
-(Date.new(2020,04,01)...Date.new(2020,04,30)).each do |date|
+(Date.new(2020,04,01)...Date.new(2020,04,10)).each do |date|
   client.query <<-SQL
-    insert into posts (user_id, title, body) values ("1", "#{date}の一日", "hogehoge")
+    insert into posts (user_id, title, body) values ("#{rand(1..4)}", "#{date}", "hogehoge")
   SQL
 end
 
 client.query("insert into users (name) values ('kohei');")
+client.query("insert into users (name) values ('ayuto');")
+client.query("insert into users (name) values ('takafumi');")
+client.query("insert into users (name) values ('yuki');")

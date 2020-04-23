@@ -3,32 +3,41 @@ require 'sinatra'
 
 sleep 2
 
-client = Mysql2::Client.new(:host => "db", :username => "root", :password => "root", :database => "sinatra_training_db", :port => 3306, :reconnect => true)
-
-client.query <<-SQL
-  create table if not exists posts (
-    id integer primary key auto_increment,
-    user_id integer,
-    title varchar(255),
-    body text
-  );
-SQL
-
-client.query <<-SQL
-  create table if not exists users (
-    id integer primary key auto_increment,
-    name varchar(255)
-  );
-SQL
-
-(Date.new(2020,04,01)...Date.new(2020,04,30)).each do |date|
-  client.query <<-SQL
-    insert into posts (user_id, title, body) values ("1", "#{date}", "hogehoge")
-  SQL
-end
-
-client.query("insert into users (name) values ('kohei');")
+DB = Mysql2::Client.new(:host => "db", :username => "root", :password => "root", :database => "sinatra_training_db", :port => 3306, :reconnect => true)
 
 get '/' do
-  erb :index
+  @result = DB.query('select * from posts;')
+  @result.each do |text|
+    p text
+  end
+  erb :'posts/index'
+end
+
+get '/posts/new' do
+  erb :'posts/new'
+end
+
+get '/posts/:id' do
+  statement = DB.prepare('select * from posts where id = ?')
+  @result = statement.execute(params[:id]).first
+  erb :'posts/show'
+end
+
+post '/posts' do
+  statement = DB.prepare('insert into posts (title, body, user_id) values (?, ?, ?)')
+  statement.execute(params[:title], params[:body], params[:user_id])
+  redirect '/'
+end
+
+get '/users/:id' do
+  statement_fetch_user = DB.prepare('select * from users where id = ?')
+  @user = statement_fetch_user.execute(params[:id]).first
+  statement_fetch_posts = DB.prepare('select * from posts where user_id = ?')
+  @posts = statement_fetch_posts.execute(params[:id])
+  erb :'users/show'
+end
+
+get '/users' do
+  @result = DB.query('select * from users;')
+  erb :'users/index'
 end

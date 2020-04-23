@@ -1,0 +1,20 @@
+<head>
+  <title>UserId: <%= @user['id'] %>さんの日記</title>
+</head>
+<body>
+  <div>
+    <p>UserId: <%= @user['id'] %></p>
+    <p>Name: <%= @user['name'] %></p>
+    <div>
+      <p>投稿一覧</p>
+      <% @posts.each do |post| %>
+        <a href="/posts/<%= post['id'] %>">
+          <p>ID: <%= post['id'] %></p>
+          <p>Title: <%= post['title'] %></p>
+          <p>Body: <%= post['body'] %></p>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</body>
+
