@@ -6,10 +6,7 @@ sleep 2
 DB = Mysql2::Client.new(:host => "db", :username => "root", :password => "root", :database => "sinatra_training_db", :port => 3306, :reconnect => true)
 
 get '/' do
-  @result = DB.query('select * from posts;')
-  @result.each do |text|
-    p text
-  end
+  @posts = DB.query('select * from posts;')
   erb :'posts/index'
 end
 
@@ -19,7 +16,7 @@ end
 
 get '/posts/:id' do
   statement = DB.prepare('select * from posts where id = ?')
-  @result = statement.execute(params[:id]).first
+  @post = statement.execute(params[:id]).first
   erb :'posts/show'
 end
 
@@ -38,6 +35,6 @@ get '/users/:id' do
 end
 
 get '/users' do
-  @result = DB.query('select * from users;')
+  @users = DB.query('select * from users;')
   erb :'users/index'
 end

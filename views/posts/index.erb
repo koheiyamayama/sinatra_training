@@ -2,14 +2,14 @@
   <title>日記アプリケーション</title>
 </head>
 <body>
-  <% @result.each do |text| %>
+  <% @posts.each do |post| %>
     <p>
-      <a href=<%= "/posts/#{text['id']}" %>>
+      <a href=<%= "/posts/#{post['id']}" %>>
         <div>
-          ID: <%= text['id'] %>
-          Title: <%= text['title'] %>
-          Body: <%= text['body'] %>
-          UserId: <%= text['user_id'] %>
+          ID: <%= post['id'] %>
+          Title: <%= post['title'] %>
+          Body: <%= post['body'] %>
+          UserId: <%= post['user_id'] %>
         </div>
       </a>
     </p>
